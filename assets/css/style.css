@@ -1,0 +1,26 @@
+* {
+    font-family: Helvetica, arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100%;
+    padding: 0;
+}
+
+header {
+    background-image: linear-gradient(to right, teal , blue);
+    width: 100%;
+    padding: 0;
+    color: white;
+}
+
+input {
+    margin: auto;
+}
+
+button {
+    margin: auto;
+}
