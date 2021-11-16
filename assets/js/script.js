@@ -10,7 +10,7 @@ var mm = String(today.getMonth() + 1).padStart(2, '0');
 var yyyy = today.getFullYear();
 today = mm + '/' + dd + '/' + yyyy;
 
-
+// function to format area and search api for lat and long and pass to next function
 function weatherSearch(input) {
     displayArea.innerHTML = "";
 
@@ -40,6 +40,7 @@ function weatherSearch(input) {
    
 };
 
+// uses lat and long from first fetch to create new fetch request and pass to new fn
 function formatApi(data, input) {
     inputLat = data.coord.lat;
     inputLon = data.coord.lon;
@@ -62,14 +63,15 @@ function formatApi(data, input) {
 
 }
 
-function displayWeather(data, input) {
-    console.log(data);
-
+// displays info from second fetch request in generated elements
+function displayWeather(data, input) { 
+    // variables for current forecast
     var temp = ((data.current.temp - 273.15) * 9/5 + 32).toFixed(2);
     var wind = data.current.wind_speed;
     var humidity = data.current.humidity;
     var uvIndex = data.current.uvi;
 
+    // current forecast elements
     var tempEl = document.createElement("p");
     tempEl.textContent = "Temp: " + temp + "°F"
 
@@ -82,7 +84,64 @@ function displayWeather(data, input) {
     var uvEl = document.createElement("p");
     uvEl.textContent = "UV Index: " + uvIndex; 
 
+    // appends current forecast elements to displayArea
     displayArea.append(tempEl, windEl, humidityEl, uvEl);
+
+    var fiveHeader = document.createElement("h3");
+    fiveHeader.textContent = "5-Day Forecast:"
+    fiveHeader.className = "w-100";
+    displayArea.appendChild(fiveHeader);
+
+    // area for 5 day forecast 
+    var fiveDay = document.createElement("div");
+    fiveDay.className = "five-day d-flex justify-content-around";
+    displayArea.appendChild(fiveDay);
+
+    // creates and populates 5 day forecast cards
+    for (i = 0; i <= 4; i++) {
+        // var fiveConditions
+        var fiveTemp = ((data.daily[i].temp.day  - 273.15) * 9/5 + 32).toFixed(1);
+        var fiveWind = data.daily[i].wind_speed;
+        var fiveHumidity = data.daily[i].humidity;
+
+        // date formatting for cards
+        var x = i; 
+        y = x + 1;
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+        dd = parseInt(dd);
+        dd = dd + y;
+        var today = mm + "/" + dd + "/" + yyyy;
+
+        // container for forecast elements
+        var dayCast = document.createElement("div");
+        dayCast.className = "card";
+        fiveDay.appendChild(dayCast);
+
+        // creates card elements and assigns content and classes
+        var dayCastTitle = document.createElement("h3");
+        dayCastTitle.textContent = "(" + today + ")";
+        dayCastTitle.className = "card-title"; 
+
+        var fiveTempEl = document.createElement("p");
+        fiveTempEl.textContent = "Temp: " + fiveTemp + " °F";
+        fiveTempEl.className = "card-text";
+
+        var fiveWindEl = document.createElement("p");
+        fiveWindEl.textContent = "Wind: " + fiveWind + " MPH";
+        fiveWindEl.className = "card-text";
+
+        var fiveHumidityEl = document.createElement("p");
+        fiveHumidityEl.textContent = "Humidity " + fiveHumidity + "%";
+        fiveHumidityEl.className = "card-text";
+
+        // appends card elements to card
+        dayCast.append(dayCastTitle, fiveTempEl, fiveWindEl, fiveHumidityEl);
+    }
+
+    
 }
 
 searchBtn.addEventListener("click", weatherSearch);

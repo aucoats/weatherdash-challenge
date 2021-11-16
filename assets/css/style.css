@@ -24,3 +24,7 @@ input {
 button {
     margin: auto;
 }
+
+.card {
+    width: 15rem;
+}
