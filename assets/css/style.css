@@ -18,13 +18,13 @@ header {
 }
 
 input {
-    margin: auto;
+    margin: 10px;
 }
 
 button {
-    margin: auto;
+    margin: 10px;
 }
 
 .card {
-    width: 15rem;
+    width: 10rem;
 }

@@ -3,12 +3,57 @@ var apiKey = "8114b53ff06599b649e7864e0adbaa91"
 var stateInput = document.querySelector("#city");
 var searchBtn = document.querySelector("button");
 var displayArea = document.querySelector("#displayArea");
+var searchArea = document.querySelector("#search-area");
+var savedSearchesBtn = document.querySelector("button");
 
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0');
 var yyyy = today.getFullYear();
 today = mm + '/' + dd + '/' + yyyy;
+
+// function to create buttons and populate with localStorage data
+function createButtons(input) {
+    var buttonArea = document.createElement("div");
+    buttonArea.className = "container border-top";
+    searchArea.append(buttonArea);
+
+    // gets past searches from local storage
+    var pastSearches = JSON.parse(localStorage.getItem("pastSearches"));
+    
+    // if localStorage is empty, create new array for pastSearches
+    if (!pastSearches) {
+        var pastSearches = []
+    }
+    
+    // pushes user input into pastsearches array
+    pastSearches.push(input);
+
+    // creates and appends buttons with pastSearches
+    for (i=0; i < pastSearches.length; i++) {
+        var savedButton = document.createElement("button");
+        savedButton.textContent = pastSearches[i]; 
+        savedButton.className = "btn btn-secondary";
+        savedButton.id = "saved-searches"
+        savedButton.setAttribute("data-query", pastSearches[i]);
+        buttonArea.append(savedButton);
+    }
+
+    // saves pastSearches to localStorage
+    localStorage.setItem("pastSearches", JSON.stringify(pastSearches));
+
+}
+
+function searchHandler(event) {
+    var input = event.target.getAttribute("data-query");
+    console.log(input);
+
+    if (input) {
+        weatherSearch(input);
+    } else if (!input) {
+        weatherSearch;
+    }
+}
 
 // function to format area and search api for lat and long and pass to next function
 function weatherSearch(input) {
@@ -37,6 +82,8 @@ function weatherSearch(input) {
         .catch(function(error) {
             alert("Unable to connect to OpenWeather.");
         });
+
+        createButtons(input);
    
 };
 
@@ -87,7 +134,7 @@ function displayWeather(data, input) {
     // appends current forecast elements to displayArea
     displayArea.append(tempEl, windEl, humidityEl, uvEl);
 
-    var fiveHeader = document.createElement("h3");
+    var fiveHeader = document.createElement("h4");
     fiveHeader.textContent = "5-Day Forecast:"
     fiveHeader.className = "w-100";
     displayArea.appendChild(fiveHeader);
@@ -117,13 +164,13 @@ function displayWeather(data, input) {
 
         // container for forecast elements
         var dayCast = document.createElement("div");
-        dayCast.className = "card";
+        dayCast.className = "card text-dark bg-info";
         fiveDay.appendChild(dayCast);
 
         // creates card elements and assigns content and classes
-        var dayCastTitle = document.createElement("h3");
+        var dayCastTitle = document.createElement("h5");
         dayCastTitle.textContent = "(" + today + ")";
-        dayCastTitle.className = "card-title"; 
+        dayCastTitle.className = "card-header"; 
 
         var fiveTempEl = document.createElement("p");
         fiveTempEl.textContent = "Temp: " + fiveTemp + " °F";
@@ -144,4 +191,7 @@ function displayWeather(data, input) {
     
 }
 
+
+
+savedSearchesBtn.addEventListener("click", searchHandler);
 searchBtn.addEventListener("click", weatherSearch);
