@@ -12,6 +12,7 @@ body {
 
 header {
     background-image: linear-gradient(to right, teal , blue);
+    text-align: center;
     width: 100%;
     padding: 0;
     color: white;
@@ -25,6 +26,44 @@ button {
     margin: 10px;
 }
 
+/* styles for card info */
 .card {
     width: 10rem;
+    background-color: midnightblue;
+    color: white;
+}
+
+img {
+    width: 5rem;
+}
+
+
+/* styles for uv index */
+span {
+    padding: 5px;
+}
+
+.low {
+    background-color: rgb(121, 228, 121);
+    color: black;
+}
+
+.moderate {
+    background-color: yellow;
+    color: black;
+}
+
+.high {
+    background-color: orange;
+    color: black;
+}
+
+.very-high {
+    background-color: red;
+    color: white;
+}
+
+.extreme {
+    background-color: purple;
+    color: white;
 }

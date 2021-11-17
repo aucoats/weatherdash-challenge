@@ -16,7 +16,12 @@ today = mm + '/' + dd + '/' + yyyy;
 function createButtons(input) {
     var buttonArea = document.createElement("div");
     buttonArea.className = "container border-top";
-    searchArea.append(buttonArea);
+    buttonArea.id = "button-area"
+    searchArea.append(buttonArea); 
+   
+    
+
+    
 
     // gets past searches from local storage
     var pastSearches = JSON.parse(localStorage.getItem("pastSearches"));
@@ -46,12 +51,12 @@ function createButtons(input) {
 
 function searchHandler(event) {
     var input = event.target.getAttribute("data-query");
-    console.log(input);
+    
 
     if (input) {
         weatherSearch(input);
     } else if (!input) {
-        weatherSearch;
+        weatherSearch(input);
     }
 }
 
@@ -129,10 +134,25 @@ function displayWeather(data, input) {
     humidityEl.textContent = "Humidity: " + humidity + "%";
 
     var uvEl = document.createElement("p");
-    uvEl.textContent = "UV Index: " + uvIndex; 
+    uvEl.textContent = "UV Index: "; 
+
+    var uvColorEl = document.createElement("span");
+    uvColorEl.textContent = uvIndex;
+    if (uvIndex < 3) {
+        uvColorEl.className = "low";
+    } else if (uvIndex >= 3 && uvIndex <= 5) {
+        uvColorEl.className = "moderate";
+    } else if (uvIndex > 5 && uvIndex < 8) {
+        uvColorEl.className = "high";
+    } else if (uvIndex >= 8 && uvIndex < 11) {
+        uvColorEl.className = "very-high";
+    } else if (uvIndex > 11) {
+        uvColorEl.className = "extreme";
+    }
 
     // appends current forecast elements to displayArea
     displayArea.append(tempEl, windEl, humidityEl, uvEl);
+    uvEl.append(uvColorEl);
 
     var fiveHeader = document.createElement("h4");
     fiveHeader.textContent = "5-Day Forecast:"
@@ -141,8 +161,9 @@ function displayWeather(data, input) {
 
     // area for 5 day forecast 
     var fiveDay = document.createElement("div");
-    fiveDay.className = "five-day d-flex justify-content-around";
+    fiveDay.className = "five-day d-flex justify-content-between";
     displayArea.appendChild(fiveDay);
+
 
     // creates and populates 5 day forecast cards
     for (i = 0; i <= 4; i++) {
@@ -150,6 +171,7 @@ function displayWeather(data, input) {
         var fiveTemp = ((data.daily[i].temp.day  - 273.15) * 9/5 + 32).toFixed(1);
         var fiveWind = data.daily[i].wind_speed;
         var fiveHumidity = data.daily[i].humidity;
+        var imgData = "http://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + "@2x.png";
 
         // date formatting for cards
         var x = i; 
@@ -164,13 +186,16 @@ function displayWeather(data, input) {
 
         // container for forecast elements
         var dayCast = document.createElement("div");
-        dayCast.className = "card text-dark bg-info";
+        dayCast.className = "card";
         fiveDay.appendChild(dayCast);
 
         // creates card elements and assigns content and classes
-        var dayCastTitle = document.createElement("h5");
+        var dayCastTitle = document.createElement("p");
         dayCastTitle.textContent = "(" + today + ")";
         dayCastTitle.className = "card-header"; 
+
+        var iconEl = document.createElement("img");
+        iconEl.setAttribute("src", imgData);
 
         var fiveTempEl = document.createElement("p");
         fiveTempEl.textContent = "Temp: " + fiveTemp + " °F";
@@ -185,7 +210,7 @@ function displayWeather(data, input) {
         fiveHumidityEl.className = "card-text";
 
         // appends card elements to card
-        dayCast.append(dayCastTitle, fiveTempEl, fiveWindEl, fiveHumidityEl);
+        dayCast.append(dayCastTitle, iconEl, fiveTempEl, fiveWindEl, fiveHumidityEl);
     }
 
     
@@ -193,5 +218,5 @@ function displayWeather(data, input) {
 
 
 
-savedSearchesBtn.addEventListener("click", searchHandler);
+// savedSearchesBtn.addEventListener("click", searchHandler);
 searchBtn.addEventListener("click", weatherSearch);
