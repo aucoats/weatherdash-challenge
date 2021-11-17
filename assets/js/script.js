@@ -35,11 +35,13 @@ function saveInput(input) {
 };
 
 function clickHandler() {
-    console.log("clicked");
+    console.log(event);
 };
 // function to create buttons and populate with localStorage data
 function createButtons(input) {
     var pastSearches = JSON.parse(localStorage.getItem("pastSearches"));
+      
+    if (!input) {    
         for (i=0; i < pastSearches.length; i++) {
         var savedButton = document.createElement("button");
         savedButton.textContent = pastSearches[i]; 
@@ -48,9 +50,8 @@ function createButtons(input) {
         savedButton.setAttribute("data-query", pastSearches[i]);
         buttonArea.append(savedButton);
     }
-
-    
-    if (input) {
+    }
+    else if (input) {
         var savedButton = document.createElement("button");
         savedButton.textContent = input; 
         savedButton.className = "btn btn-secondary";
