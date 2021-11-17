@@ -5,6 +5,7 @@ var searchBtn = document.querySelector("button");
 var displayArea = document.querySelector("#displayArea");
 var searchArea = document.querySelector("#search-area");
 var savedSearchesBtn = document.querySelector("button");
+var buttonArea = document.querySelector("#button-area");
 
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
@@ -12,17 +13,10 @@ var mm = String(today.getMonth() + 1).padStart(2, '0');
 var yyyy = today.getFullYear();
 today = mm + '/' + dd + '/' + yyyy;
 
-// function to create buttons and populate with localStorage data
-function createButtons(input) {
-    var buttonArea = document.createElement("div");
-    buttonArea.className = "container border-top";
-    buttonArea.id = "button-area"
-    searchArea.append(buttonArea); 
-   
-    
+var pastSearches = [];
 
-    
-
+// saves user input
+function saveInput(input) {
     // gets past searches from local storage
     var pastSearches = JSON.parse(localStorage.getItem("pastSearches"));
     
@@ -34,6 +28,25 @@ function createButtons(input) {
     // pushes user input into pastsearches array
     pastSearches.push(input);
 
+    // saves pastSearches to localStorage
+    localStorage.setItem("pastSearches", JSON.stringify(pastSearches));
+
+    createButtons(input);
+};
+
+// function to create buttons and populate with localStorage data
+function createButtons(input) {
+    buttonArea.innerHtml = "";
+    var pastSearches = JSON.parse(localStorage.getItem("pastSearches"));
+    if (input) {
+        var savedButton = document.createElement("button");
+        savedButton.textContent = input; 
+        savedButton.className = "btn btn-secondary";
+        savedButton.id = "saved-searches"
+        savedButton.setAttribute("data-query", input);
+        buttonArea.append(savedButton);
+    } else if (!input) {
+    
     // creates and appends buttons with pastSearches
     for (i=0; i < pastSearches.length; i++) {
         var savedButton = document.createElement("button");
@@ -43,11 +56,8 @@ function createButtons(input) {
         savedButton.setAttribute("data-query", pastSearches[i]);
         buttonArea.append(savedButton);
     }
-
-    // saves pastSearches to localStorage
-    localStorage.setItem("pastSearches", JSON.stringify(pastSearches));
-
-}
+    }
+};
 
 function searchHandler(event) {
     var input = event.target.getAttribute("data-query");
@@ -87,9 +97,8 @@ function weatherSearch(input) {
         .catch(function(error) {
             alert("Unable to connect to OpenWeather.");
         });
-
-        createButtons(input);
-   
+        
+        saveInput(input);
 };
 
 // uses lat and long from first fetch to create new fetch request and pass to new fn
@@ -217,6 +226,6 @@ function displayWeather(data, input) {
 }
 
 
-
+// createButtons();
 // savedSearchesBtn.addEventListener("click", searchHandler);
 searchBtn.addEventListener("click", weatherSearch);
