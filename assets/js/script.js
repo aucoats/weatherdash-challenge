@@ -34,8 +34,17 @@ function saveInput(input) {
     createButtons(input);
 };
 
+// function to get info from clicked buton and pass value into weatherSearch()
 function clickHandler() {
-    console.log(event);
+    var buttonInput = event.target.getAttribute("data-query")
+
+    if (event.target.getAttribute("data-query")) {
+        stateInput.value = buttonInput
+        weatherSearch();
+    } else {
+        return
+    }
+    
 };
 // function to create buttons and populate with localStorage data
 function createButtons(input) {
@@ -56,7 +65,7 @@ function createButtons(input) {
         savedButton.textContent = input; 
         savedButton.className = "btn btn-secondary";
         savedButton.id = "saved-searches"
-        savedButton.setAttribute("onclick", clickHandler());
+        savedButton.setAttribute("onclick", "clickHandler()");
         savedButton.setAttribute("data-query", input);
         buttonArea.append(savedButton);
     } 
@@ -69,6 +78,7 @@ function weatherSearch(input) {
     displayArea.innerHTML = "";
 
     var input = stateInput.value;
+    
 
     var cityName = document.createElement("h2");
     cityName.textContent = input + " (" + today + ")";
