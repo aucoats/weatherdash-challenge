@@ -48,27 +48,30 @@ function clickHandler() {
 };
 // function to create buttons and populate with localStorage data
 function createButtons(input) {
+    buttonArea.innerHTML = "";
+
     var pastSearches = JSON.parse(localStorage.getItem("pastSearches"));
       
-    if (!input) {    
+    if (pastSearches) {    
         for (i=0; i < pastSearches.length; i++) {
         var savedButton = document.createElement("button");
         savedButton.textContent = pastSearches[i]; 
         savedButton.className = "btn btn-secondary";
         savedButton.id = "saved-searches"
+        savedButton.setAttribute("onclick", "clickHandler()")
         savedButton.setAttribute("data-query", pastSearches[i]);
         buttonArea.append(savedButton);
     }
     }
-    else if (input) {
-        var savedButton = document.createElement("button");
-        savedButton.textContent = input; 
-        savedButton.className = "btn btn-secondary";
-        savedButton.id = "saved-searches"
-        savedButton.setAttribute("onclick", "clickHandler()");
-        savedButton.setAttribute("data-query", input);
-        buttonArea.append(savedButton);
-    } 
+    
+        // var savedButton = document.createElement("button");
+        // savedButton.textContent = input; 
+        // savedButton.className = "btn btn-secondary";
+        // savedButton.id = "saved-searches"
+        // savedButton.setAttribute("onclick", "clickHandler()");
+        // savedButton.setAttribute("data-query", input);
+        // buttonArea.append(savedButton);
+     
     
 };
 
@@ -229,8 +232,9 @@ function displayWeather(data, input) {
     
 }
 
+// populates buttons on page load
+createButtons();
 
-
-
+// event listener for search button
 searchBtn.addEventListener("click", weatherSearch);
 
