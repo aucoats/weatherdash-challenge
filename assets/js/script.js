@@ -4,7 +4,6 @@ var stateInput = document.querySelector("#city");
 var searchBtn = document.querySelector("button");
 var displayArea = document.querySelector("#displayArea");
 var searchArea = document.querySelector("#search-area");
-var generalBtn = document.querySelector("button");
 var buttonArea = document.querySelector("#button-area");
 
 var today = new Date();
@@ -46,6 +45,7 @@ function clickHandler() {
     }
     
 };
+
 // function to create buttons and populate with localStorage data
 function createButtons(input) {
     buttonArea.innerHTML = "";
@@ -64,17 +64,7 @@ function createButtons(input) {
     }
     }
     
-        // var savedButton = document.createElement("button");
-        // savedButton.textContent = input; 
-        // savedButton.className = "btn btn-secondary";
-        // savedButton.id = "saved-searches"
-        // savedButton.setAttribute("onclick", "clickHandler()");
-        // savedButton.setAttribute("data-query", input);
-        // buttonArea.append(savedButton);
-     
-    
 };
-
 
 // function to format area and search api for lat and long and pass to next function
 function weatherSearch(input) {
